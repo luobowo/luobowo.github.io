@@ -11,8 +11,6 @@ type: page
 
 ## 关于我
 
-<iframe src="https://githubbadge.appspot.com/gaohaoyang?s=1" style="border: 0;height: 142px;width: 200px;overflow: hidden;" frameBorder="0"></iframe>
-
 平淡无奇，不善于表达的典型码农。
 
 梦想是写一本书，现在正在努力学习怎么讲好一个故事...
