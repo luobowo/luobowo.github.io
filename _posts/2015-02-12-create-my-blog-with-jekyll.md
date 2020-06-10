@@ -1,9 +1,9 @@
 ---
 layout: post
-title:  "Jekyll 搭建静态博客"
+title:  "[转载] Jekyll 搭建静态博客"
 date:   2015-02-15 22:14:54
 categories: jekyll
-tags: jekyll RubyGems
+tags: jekyll
 ---
 
 * content
@@ -104,7 +104,7 @@ watch为了检测文件夹内的变化，即修改后不需要重新启动jekyll
 
 ## 可能出现的问题
 
-### `hitimes/hitimes (LoadError)`
+### `hitimes错误`
 
 **错误代码：**
 
@@ -154,3 +154,15 @@ Done installing documentation for hitimes after 1 seconds
 
 
 关于，[hitimes](https://rubygems.org/gems/hitimes/versions/1.2.2) 是一个快速的高效的定时器解决方案库，详情可以去官网查看。
+
+### `jekyll-paginate错误`
+
+**错误代码：**
+```
+Dependency Error: Yikes! It looks like you don't have jekyll-paginate or one of its dependencies installed
+```
+
+**解决方案：**
+```
+sudo gem install jekyll-paginate
+```
