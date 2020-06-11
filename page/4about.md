@@ -11,9 +11,9 @@ type: page
 
 ## 关于我
 
-平淡无奇，不善于表达的典型码农。
+心里住着个追风少年的程序员，最喜欢的小说是《平凡的世界》，也很喜欢《黄金时代》～
 
-梦想是写一本书，现在正在努力学习怎么讲好一个故事...
+梦想是写一本书，正在努力学习怎么讲好一个故事...
 
 * 2019.09 - 至今 阿里巴巴菜鸟网络，后台开发工程师
 * 2018.10 - 2019.06 拼多多，后台研发工程师
@@ -27,7 +27,7 @@ type: page
 * GitHub：[luobowo](https://github.com/luobowo)
 * email：zhangfei8978@163.com
 
-## 关于本站
+## 关于本博客
 
 **本博客根据：[https://github.com/Gaohaoyang/gaohaoyang.github.io](https://github.com/Gaohaoyang/gaohaoyang.github.io)进行搭建，更多细节，请参考[Github搭建个人博客](https://blog.csdn.net/xudailong_blog/article/details/78762262)**
 
