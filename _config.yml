@@ -26,10 +26,10 @@ dribbble_username:
 description_footer: 来自张飞的个人专栏！
 
 # comments
-# two ways to comment, only choose one, and use your own short name
-# 两种评论插件，选一个就好了，使用自己的 short_name
-duoshuo_shortname: hygblog
-disqus_shortname: #gaohaoyang
+# 替换为自己评论插件的id和key
+valine_id: kYABEYohgHJRbU1tpa7w3AoF-gzGzoHsz
+valine_key: AbjM9FJMXOJoHKjKCV6naHL8
+
 
 # statistic analysis 统计代码
 # 百度统计 id，将统计代码替换为自己的百度统计id，即

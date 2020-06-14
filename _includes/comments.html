@@ -1,4 +1,4 @@
-{% if site.duoshuo_shortname %}
+{% if site.valine_id %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,9 +16,9 @@
             // AV 对象来自上面引入av-min.js(老司机们不要开车➳♡゛扎心了老铁)
             av: AV, 
             el: '.comment', // 
-            app_id: 'kYABEYohgHJRbU1tpa7w3AoF-gzGzoHsz', // 这里填写上面得到的APP ID
-            app_key: 'AbjM9FJMXOJoHKjKCV6naHL8', // 这里填写上面得到的APP KEY
-            placeholder: 'ヾﾉ≧∀≦)o来啊，快活啊!' // [v1.0.7 new]留言框占位提示文字
+            app_id: '{{site.valine_id}}', // 这里填写上面得到的APP ID
+            app_key: '{{site.valine_key}}', // 这里填写上面得到的APP KEY
+            placeholder: '请留下你的评论！' // [v1.0.7 new]留言框占位提示文字
         });
     </script>
 </body>
