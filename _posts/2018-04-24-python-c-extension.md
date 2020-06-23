@@ -33,7 +33,7 @@ tags: python c
 
 #### 1.1.2 C函数
 python C 扩展的函数定义一般是下面的三种形式之一：
-```C
+```c
 static PyObject *MyFunction( PyObject *self, PyObject *args );
 
 static PyObject *MyFunctionWithKeywords(PyObject *self,  PyObject *args, PyObject *kw);
@@ -42,7 +42,7 @@ static PyObject *MyFunctionWithNoArgs( PyObject *self );
 ```
 Python中的函数都返回PyObject类型的指针，没有像C那种返回void类型的；如果你的函数不想返回一个值的话，Python定义了一个宏`Py_RETURN_NONE`，它等价于在脚本层返回None。
 你的C函数应该是个静态函数，名字是任意的，但一般命名为`模块名_函数名`的形式，所以，一个典型的函数长这样：
-```C
+```c
 static PyObject *modulename_func(PyObject *self, PyObject *args) {
    /* Do something here. */
    Py_RETURN_NONE;
@@ -52,7 +52,7 @@ static PyObject *modulename_func(PyObject *self, PyObject *args) {
 #### 1.1.3 方法映射表
 
 方法映射表就是PyMethodDef结构的数组，而PyMethodDef结构体长这样：
-```C
+```c
 struct PyMethodDef {
    char *ml_name;
    PyCFunction ml_meth;
@@ -68,7 +68,7 @@ struct PyMethodDef {
 * **ml_doc**: 这是函数的文档字符串，如果你不想写的话，直接给其赋值为NULL。
 
 最后要注意的是，这个映射表应该以一个由NULL和0组成的结构体进行结尾。所以，一个方法映射表应该长这样：
-```C
+```c
 static PyMethodDef module_methods[] = {
    { "func", (PyCFunction)module_func, METH_VARARGS, NULL },
    { NULL, NULL, 0, NULL }
@@ -79,7 +79,7 @@ static PyMethodDef module_methods[] = {
 
 你的扩展模块的最后一部分就是初始化函数了，它会在模块被导入时被python解析器调用。**初始化函数必须被命名为<font color=red>initModuleName</font>**，这里ModuleName表示你的模块名。  
 这个初始化函数需要从你构建的库中导出，所以Python头文件里定义了PyMODINIT_FUNC来进行这项工作，你需要做的就是在定义函数时使用它；这个函数也应该是**你的模块中唯一一个非static的项**。这个初始化函数的原型一般是这样的：
-```C
+```c
 PyMODINIT_FUNC initModuleName() {
    Py_InitModule3(ModuleName, module_methods, "docstring...");
 }
@@ -92,7 +92,7 @@ py_InitModule3的参数定义如下：
 
 ---
 将上面的所有步骤结合在一起，一个C扩展模块看起来长这样：
-```C
+```c
 #include <Python.h>
 
 static PyObject *module_func(PyObject *self, PyObject *args) {
@@ -115,7 +115,7 @@ PyMODINIT_FUNC initModule() {
 
 在1.1节我们已经覆盖了一个简单C扩展模块所需的所有知识点，现在我们通过一个实例来实践下；我们的C模块实现的功能是两个浮点数的乘法和除法，最后编译成名为`example`的模块。  
 首先，根据上面的知识点，我们写一个example.c源文件，内容如下：
-```C
+```c
 #include <Python.h>
 
 static PyObject* example_mul(PyObject* self, PyObject*args)
@@ -185,10 +185,11 @@ Visual Studio 2015 (VS14): SET VS90COMNTOOLS=%VS140COMNTOOLS%
 ### 1.3 参数提取——PyArg\_ParseTuple函数
 
 上面的例子中，脚本层传入的参数会存在PyObject* args所指向的PyObject里面，那么我们怎么提取出参数呢？答案是使用PyArg_ParseTuple函数，它的原型是这样的：
-```C
+```c
 int PyArg_ParseTuple(PyObject* tuple,char* format,...)
 ```
 这个函数遇到错误返回0，返回别的数字代表正确。tuple就是C函数传进来的第二个参数，format是描述参数格式的字符串，里面的格式码意义如下：  
+
 Code | C type | Meaning
  --- | --- | ---
   c  | char   | A Python string of length 1 becomes a C char
@@ -212,17 +213,18 @@ Code | C type | Meaning
   ;	 |       	 | Format end, followed by entire error message text.
 
 剩余的参数就是**变量的地址**，而变量的类型由格式串的格式码决定。要解析带有关键字的参数的话，请使用PyArg\_ParseTupleAndKeywords
-```C
+```c
 int PyArg_ParseTupleAndKeywords(PyObject *args, PyObject *kw, const char *format, char *keywords[], ...)
 ```
 
 ### 1.4 返回值和Py_BuildValue
 
 Python C 函数的返回值都是PyObject\*类型的（错误返回NULL），如果不想返回任何值，就是用宏`Py_RETURN_NONE`。Py\_BuildValue刚好和PyArg\_ParseTuple相反，它是用来将C的变量构建为Python的PyObject\*的(但这时传入的不是地址，而是值)，它的原型如下：
-```C
+```c
 PyObject* Py_BuildValue(char* format,...)
 ```
 这个字符串格式码和上面的类似，下面列出了常用的字节码：
+
  Code | C type | Meaning
  ---  | ---    | ---
   c	  | char   | A C char becomes a Python string of length 1.
@@ -243,6 +245,7 @@ PyObject* Py_BuildValue(char* format,...)
 (...) | as per ... | Builds Python tuple from C values.
 [...] |	as per ... | Builds Python list from C values.
 {...} | as per ... | Builds Python dictionary from C values, alternating keys and values.
+
 
 {...} 用来从偶数个key和value隔开的C的值中构建字典，例如`Py_BuildValue("{issi}", 23, "zig", "zag", 42)`返回一个python的字典：{23:'zig', 'zag':42}.
 
@@ -272,7 +275,7 @@ C调用Python的方法也很简单，下面我们以windows+VS2015+python2.7讲�
 
 然后，我们新建源文件，内容如下所示：
 
-```C
+```c
 #include <Python.h>
 
 int main(int argc, char *argv[])
@@ -440,7 +443,7 @@ Py_InitModule4
 
 上面两节我们介绍了引用以及引用的拥有权规则，现在我们讲讲CPython中引用中容易犯的错误，引用主要容易出两类错误:  
 (1)引用不再指向对象后没有减少引用计数导致内存泄露，类似于在C中调用了`malloc()`而没有调用`free()`，例如： 
-```C
+```c
 static PyObject *bad_incref(PyObject *pObj) {
     Py_INCREF(pObj);
     /* ... a metric ton of code here ... */
@@ -454,7 +457,7 @@ static PyObject *bad_incref(PyObject *pObj) {
 }
 ```
 (2)在对象释放后仍然通过引用去访问对象，类似于在C中`free()`以后去获取对象或者使用野指针([dangling pointer](https://en.wikipedia.org/wiki/Dangling_pointer))，例如：  
-```C
+```c
 static PyObject *bad_incref(PyObject *pObj) {
     /* Forgotten Py_INCREF(pObj); here... */
 
@@ -469,7 +472,7 @@ static PyObject *bad_incref(PyObject *pObj) {
 
 #### 3.3.1 New References比较容易出现的错误
 对于New Reference，我们最容易犯的错误就是将一个函数返回的New Reference作为临时变量传进函数的参数，由于大部分函数的参数传递都是以Borrowed Reference进行的，就会导致这个New Reference没有人对其进行引用计数管理，从而导致内存泄露。以下的函数是将两个数进行详见，我们用第一节的方法将其编译成python的扩展模块，并将example\_substract导出为sub接口进行调用。
-```C
+```c
 static PyObject* subtract_long(long a, long b) {
     PyObject *pA, *pB, *r;
 
@@ -494,7 +497,7 @@ static PyObject* example_subtract(PyObject* self, PyObject* args)
 }
 ```
 然而，一个很容易犯的错误就是在调用`PyNumber_Subtrace`时，我们直接将`PyLong_FromLong(x)`传进去，由于`PyNumber_Substract()`只会借取引用，它并不会释放引用，这时返回的New Reference并没有对其进行`Py_DECREF`，就会导致内存泄露，如下example\_bad\_subtrace，我们将其导出为bad\_sub接口：
-```C
+```c
 static PyObject* bad_subtract_long(long a, long b) {
     PyObject *r;
     r = PyNumber_Subtract(PyLong_FromLong(a), PyLong_FromLong(b));  /*  r: New reference. */
@@ -521,7 +524,7 @@ static PyObject* example_bad_subtract(PyObject* self, PyObject* args)
 ### 3.3.2 Stolen References比较容易出现的错误
 
 CPython中Stolen Reference的情况不多，两个最重要的需要记住的就是`PyList_SetItem`和`PyTuple_SetItem`，对于Stolen Reference，我们只需要记住当引用传进这两个函数后，我们便不再拥有对引用的拥有权，也就不能再对其进行`Py_DECREF`了。
-```C
+```c
 static PyObject *make_tuple(void) {
     PyObject *r;
     PyObject *v;
@@ -549,7 +552,7 @@ static PyObject *make_tuple(void) {
 * 对列表进行操作`do_something()`
 * 操作最后一个元素的borrowed reference，这里只是简单的打印它。  
 代码如下：
-```C
+```c
 static PyObject *pop_and_print_BAD(PyObject *pList) {
     PyObject *pLast;
 
@@ -563,7 +566,7 @@ static PyObject *pop_and_print_BAD(PyObject *pList) {
 }
 ```
 这里PLast是一个borrowed reference，这段代码看起来似乎没有问题，但让我们再仔细分析，`pList`拥有对它的对象的所有引用，所以在`do_something`中可能释放任何元素的引用，当它释放了所有元素的引用后，`PLast`是否还有效取决于最后一个元素是否还有别的引用。例如`do_something`可能如下：
-```C
+```c
 void do_something(PyObject *pList) {
     while (PyList_Size(pList) > 0) {
         PySequence_DelItem(pList, 0);
